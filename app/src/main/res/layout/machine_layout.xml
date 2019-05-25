@@ -246,6 +246,28 @@
 
                         </TableRow>
 
+                        <TableRow
+                            android:layout_marginTop="5dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="引烟电机"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/tv_somke_motor_state"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:gravity="center"
+                                android:text="开启"
+                                android:textColor="@color/white"
+                                android:background="@drawable/open"/>
+
+                        </TableRow>
+
                     </TableLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>

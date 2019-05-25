@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,40 +21,32 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
-import com.google.gson.JsonObject;
 import com.zhongnongfuan.app.R;
-import com.zhongnongfuan.app.bean.DetailState;
 import com.zhongnongfuan.app.bean.LatLngBean;
-import com.zhongnongfuan.app.network.MyNetWork;
-import com.zhongnongfuan.app.network.ResultCallback;
-import com.zhongnongfuan.app.utils.ParseUtil;
+import com.zhongnongfuan.app.bean.MachineList;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import okhttp3.Request;
-
+/**
+ * 显示地图
+ */
 public class MachineMapActivity extends Activity {
     private static final String TAG = "MachineMapActivity:";
     MapView mMapView;
     BaiduMap mBaiduMap;
     ArrayList<LatLngBean.DataBean> dataBeanList;
-
-
+    MachineList mMachineList;
+    private TextView tvWorkState;
+    private TextView tvRefinery;
+    private TextView tvDeviceId;
 
 
     @Override
@@ -70,12 +61,14 @@ public class MachineMapActivity extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             dataBeanList = (ArrayList<LatLngBean.DataBean>) intent.getSerializableExtra("dataBeanList");
-            Log.i(TAG, "MachineMapActivity通过intent获取的dataBeanList个数为：:  " + dataBeanList.size() + "  分别为： " + dataBeanList);
+            mMachineList = (MachineList) intent.getSerializableExtra("MachineList");
+
         }
         //获取地图控件引用
         mMapView = findViewById(R.id.bmapview);
         mBaiduMap = mMapView.getMap();//获取地图实例
         initLocationOption();
+
     }
 
 
@@ -129,53 +122,68 @@ public class MachineMapActivity extends Activity {
     public class MyLocationListener extends BDAbstractLocationListener {
         private static final String TAG = "MyLocationListener";
         private ArrayList<LatLngBean.DataBean> dataBeanList;
-        private List<Marker> mMarkerList;
-        private Marker marker;
-        private Bundle mBundle;
+        //        private List<Marker> mMarkerList;
+
         private Double lat;
         private Double lon;
 
         public MyLocationListener(ArrayList<LatLngBean.DataBean> dataBeanList) {
-            Log.i(TAG, "MyLocationListener: 监听方法执行：：：：：");
             this.dataBeanList = dataBeanList;
         }
 
         //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
         @Override
         public void onReceiveLocation(BDLocation location) {
-       /*     LatLng cenpt = new LatLng(location.getLatitude(),location.getLongitude());//设定中心点坐标
-            MapStatus mMapStatus = new MapStatus.Builder()//定义地图状态
-            .target(cenpt).zoom(18).build(); //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-            mBaiduMap.setMapStatus(mMapStatusUpdate);//改变地图状态*/
             Log.i(TAG, "onReceiveLocation: onReceiveLocation方法执行：：：：");
-            mMarkerList = new ArrayList<>();
+
+        if (dataBeanList!=null){
+            /**
+             * 对多个点标记添加监听
+             */
+            //先创建一个Bundle用来进行marker的值的传递.
+            Bundle mBundle = null;
+
+            /**
+             * 批量添加多个点标记,将
+             */
+            //创建OverlayOptions的集合
+            List<Marker> markerList = new ArrayList<>();
+            Marker marker;
+            LatLng point;//坐标点
+            MarkerOptions option;//添加图层
+            View location_option = null;
+            TextView textView;//图标对应的文本
+            BitmapDescriptor bitmapDescriptor;
+            //设置坐标点
             for (int i = 0; i < dataBeanList.size(); i++) {
-                //根据view设置坐标定位图标
-                View location_option = LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.location_option_layout, null);
-                TextView textView = location_option.findViewById(R.id.baidumap_custom_text);
-                textView.setText("机器ID：" + dataBeanList.get(i).getDeviceid());
-                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(location_option);
-
-                if (dataBeanList.get(i).getLat() != null && ("".equals(dataBeanList.get(i).getLat()))){
-                    lat = Double.parseDouble(dataBeanList.get(i).getLat());
-                }else {
-                    lat = 0.0;
-                }
-                if (dataBeanList.get(i).getLon() != null && ("".equals(dataBeanList.get(i).getLon()))){
-                    lon = Double.parseDouble(dataBeanList.get(i).getLon());
-                }else {
-                    lon = 0.0;
-                }
-
-                LatLng position = new LatLng(lat, lon);
-                OverlayOptions options = new MarkerOptions().position(position).icon(bitmapDescriptor).title("机器");
                 mBundle = new Bundle();
                 mBundle.putString("deviceId", dataBeanList.get(i).getDeviceid());
-                marker = (Marker) mBaiduMap.addOverlay(options);
+                mBundle.putString("lat", dataBeanList.get(i).getLat());
+                mBundle.putString("lon", dataBeanList.get(i).getLon());
+                for (int j = 0; j < mMachineList.getData().size(); j++) {
+                    Log.i(TAG, "onReceiveLocation: mBundle值设置为：：：：" + dataBeanList.get(i).getDeviceid());
+                    if (dataBeanList.get(i).getDeviceid().equals(mMachineList.getData().get(j).getSB_BM())){
+                        Log.i(TAG, "onReceiveLocation: 设备marker背景：：：：工作状态为：：：" + mMachineList.getData().get(i).getGzzt());
+                        if ("报警".equals(mMachineList.getData().get(i).getGzzt())){
+                            location_option = LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.location_option_red, null);
+                        }else {
+                            location_option = LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.location_option_green, null);
+                        }
+                    }
+                }
+
+                point = new LatLng(Double.parseDouble(dataBeanList.get(i).getLat()), Double.parseDouble(dataBeanList.get(i).getLon()));
+                //根据view设置坐标定位图标， 即构建Marker图标
+                textView = location_option.findViewById(R.id.baidumap_custom_text);
+                textView.setText("机器ID：" + dataBeanList.get(i).getDeviceid());
+                bitmapDescriptor = BitmapDescriptorFactory.fromView(location_option);
+                //构建MarkerOption，用于在地图上添加Marker
+                option = new MarkerOptions().position(point).icon(bitmapDescriptor).title("机器");
+                marker = (Marker) mBaiduMap.addOverlay(option);
                 marker.setExtraInfo(mBundle);
-                mMarkerList.add(marker);
+                markerList.add(marker);
             }
+
             //设置多个marker在同一个页面内
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             for (int x = 0; x < dataBeanList.size(); x++) {
@@ -199,37 +207,44 @@ public class MachineMapActivity extends Activity {
                 @Override
                 public boolean onMarkerClick(final Marker marker) {
                     Log.i(TAG, "onMarkerClick: 点击marker事件：：：");
-                    final Bundle bundle = marker.getExtraInfo();
-                    String deviceId = bundle.getString("deviceId");
-                    String devicePath = Prefix.PREFIX+"Android/SBZT";
-                    Map<String, String> paramMap = new HashMap<>();
-                    paramMap.put("deviceId", "5678");
-//                    paramMap.put("deviceId", deviceId);
-                    MyNetWork myNetWork = MyNetWork.getInstance(MachineMapActivity.this);
-                    myNetWork.postAsynHttp(devicePath, paramMap, new ResultCallback() {
-                        @Override
-                        public void onError(Request request, Exception e) {
-                            Toast.makeText(MachineMapActivity.this, "加载具体信息失败", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = marker.getExtraInfo();
+                    //获取机器id
+                    final String deviceId = bundle.getString("deviceId");
+                    String deviceId2;
+                    List<String> deviceIdList = new ArrayList<>();
+                    String lat = bundle.getString("lat");
+                    String lon = bundle.getString("lon");
+                    Log.i(TAG, "onMarkerClick: ：：：" + deviceId + "  获取的坐标为：：：(" + lat + " , " + lon + ")");
+                    for (int i = 0; i < dataBeanList.size(); i++) {
+                        if (lat.equals(dataBeanList.get(i).getLat()) && lon.equals(dataBeanList.get(i).getLon())){
+                            deviceId2 = dataBeanList.get(i).getDeviceid();
+                            deviceIdList.add(deviceId2);
                         }
-
-                        @Override
-                        public void onResponse(String str) throws IOException {
-                            Log.i(TAG, "onResponse: 点击marker响应的具体信息为：：：" + str);
-                            DetailState detailState = ParseUtil.parseDeviceJson(str);
-                            if (detailState.getCode() == 1) {
-                                LatLng latLng = marker.getPosition();
-                                InfoWindow currentInfoWindow = new InfoWindow(getInfoWindowView(detailState), latLng, -85);
-                                mBaiduMap.showInfoWindow(currentInfoWindow);
-                            } else {
-                                Toast.makeText(MachineMapActivity.this, "加载具体信息有误", Toast.LENGTH_SHORT).show();
+                    }
+                    LatLng latLng;
+                    InfoWindow currentInfoWindow;
+                    for (int j = 0; j < deviceIdList.size(); j++) {
+                        for (int i = 0; i < mMachineList.getData().size(); i++) {
+                            Log.i(TAG, "onResponse: 在点击marker时循环遍历：：：：：：：设备编码为：：" +
+                                    mMachineList.getData().get(i).getSB_BM() + "该marker的设备编码为：：：" + deviceIdList.toString());
+                            //一个位置有1或多个坐标
+                            if ((deviceIdList.get(j).trim()).equals(mMachineList.getData().get(i).getSB_BM().trim())){
+                                Log.i(TAG, "onMarkerClick: 编码相等");
+                                latLng = marker.getPosition();
+                                Log.i(TAG, "onResponse: 获取该marker的坐标：：：：：：：");
+                                currentInfoWindow = new InfoWindow( getInfoWindowView(mMachineList.getData().get(i)), latLng, -85);
+                                Log.i(TAG, "onResponse: new悬浮窗对象：：：：：：");
+                                mBaiduMap.showInfoWindow(currentInfoWindow);//显示悬浮窗
+                                break;
                             }
-
                         }
-                    });
+                    }
                     return true;
                 }
             });
-
+        }else {
+            Toast.makeText(MachineMapActivity.this, "无机器可显示", Toast.LENGTH_SHORT).show();
+        }
         }
     }
 
@@ -239,20 +254,20 @@ public class MachineMapActivity extends Activity {
         mMapView.onDestroy();
     }
 
-    private View getInfoWindowView(final DetailState detailState) {
-        Log.i(TAG, "getInfoWindowView: 获取弹窗：：：：：");
+    private View getInfoWindowView(final MachineList.DataBean dataBean) {
+        Log.i(TAG, "getInfoWindowView: 获取弹窗：：：：：要填充的数据为：：：" + dataBean.toString());
         ViewGroup infoView = null;
         if (null == infoView) {
             infoView = (ViewGroup) LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.baidumap_infowindow, null);
         }
 
-        TextView tvRefinery = infoView.findViewById(R.id.tv_refinery);
-        TextView tvWorkState = infoView.findViewById(R.id.tv_work_state);
-        TextView tvDeviceId = infoView.findViewById(R.id.tv_deviceId);
+        tvRefinery = infoView.findViewById(R.id.tv_refinery);
+        tvWorkState = infoView.findViewById(R.id.tv_work_state);
+        tvDeviceId = infoView.findViewById(R.id.tv_deviceId);
 
-        tvRefinery.setText("加工厂：湖北一航");
-        tvWorkState.setText("工作状态：排粮");
-        tvDeviceId.setText("设备编号：" + detailState.getData().getDeviceId());
+        tvRefinery.setText("加工厂：" + dataBean.getJgc());
+        tvWorkState.setText("工作状态：" + dataBean.getGzzt());
+        tvDeviceId.setText("设备编号：" + dataBean.getSB_BM());
 
         return infoView;
     }

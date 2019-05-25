@@ -9,20 +9,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-       /* *//*极光推送*//*
-        ndk {
-            //选择要添加的对应 cpu 类型的 .so 库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', "armeabi", "armeabi-v7a", "x86_64"
-            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
-        }
-
-        *//*极光推送*//*
-        manifestPlaceholders = [
-                JPUSH_PKGNAME: applicationId,
-                JPUSH_APPKEY : "106c3167b1bfe4d3d7e33cb5", //JPush 上注册的包名对应的 Appkey.
-                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
-        ]*/
     }
     packagingOptions {
         doNotStrip '*/mips/*.so'
@@ -72,13 +58,15 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation files('libs/BaiduLBS_Android.jar')
     //极光推送
-  /*  implementation 'cn.jiguang.sdk:jpush:3.2.0' // 此处以JPush 3.2.0 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:1.2.7'  // 此处以JCore 1.2.7 版本为例。*/
-
+    /*  implementation 'cn.jiguang.sdk:jpush:3.2.0' // 此处以JPush 3.2.0 版本为例。
+            implementation 'cn.jiguang.sdk:jcore:1.2.7'  // 此处以JCore 1.2.7 版本为例。*/
     implementation 'com.android.support:swiperefreshlayout:28.0.0'
-
-
     //下拉刷新和上滑刷新
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
+    //极光推送
+    implementation files('libs/jcore-android-1.2.7.jar')
+    implementation files('libs/jpush-android-3.2.0.jar')
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.4'
 }

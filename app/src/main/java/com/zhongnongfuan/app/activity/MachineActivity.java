@@ -11,23 +11,25 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.zhongnongfuan.app.R;
 import com.zhongnongfuan.app.bean.DetailState;
 import com.zhongnongfuan.app.network.MyNetWork;
 import com.zhongnongfuan.app.network.ResultCallback;
-import com.zhongnongfuan.app.utils.ParseUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Request;
 
 /**
- * @author qichaoqun
- * @date 2019/1/19
+ * 机器具体信息
  */
 public class MachineActivity extends AppCompatActivity {
 
@@ -61,10 +63,15 @@ public class MachineActivity extends AppCompatActivity {
     private static final int ERROR = 0;
     private static final int CHANG_UI = 1;
     DetailState detailState;
-    String machineName;
+    String machineDeviceId;
+    String deviceName;
     Message message;
     DetailState.DataBean mDataBean;
     Map<String, String> paramMap;
+    Timer mTimer;
+    String devicePath = Prefix.PREFIX + "Android/SBZT";
+    @BindView(R.id.tv_somke_motor_state)
+    TextView tvSomkeMotorState;
 /*    @BindView(R.id.tv_time)
     TextView tvTime;*/
 
@@ -74,13 +81,65 @@ public class MachineActivity extends AppCompatActivity {
         setContentView(R.layout.machine_layout);
         ButterKnife.bind(this);
 
-        intent = getIntent();
-        machineName = intent.getStringExtra("machine_name");
-        Log.i("用户选择的机器的名字为：：：", "onCreate: " + machineName);
+/*        intent  =  getIntent();
+        machineDeviceId = intent.getStringExtra("deviceId");
+        deviceName = intent.getStringExtra("deviceName");
+        Log.i("用户选择的机器的设备编号为：：：", "onCreate: " + machineDeviceId + "   名称为：：：" + deviceName);*/
 
-        String devicePath = Prefix.PREFIX + "Android/SBZT";
+        intent = getIntent();
+        if (intent!=null){
+            if (intent.getExtras()!= null){
+                if ("MainActivity".equals(intent.getStringExtra("activity"))){
+                    Log.i("", "onCreate: 数据来自MainActivity：：：：：");
+                    machineDeviceId = intent.getStringExtra("deviceId");
+                    deviceName = intent.getStringExtra("deviceName");
+                }else{
+                    Log.i("", "onCreate: 数据来自receiver");
+                    Bundle bundle = intent.getExtras();  //取出来的是个数组
+                    //获取bundle中所有key的值
+                    Set<String> getKey = bundle.keySet();
+                    for (String key : getKey) {
+                        if ("cn.jpush.android.ALERT".equals(key)) {
+                            Log.i("", "onCreate: 获取的推送消息::::" + key);
+                            String str = bundle.getString("cn.jpush.android.ALERT");
+                            String[] arr = str.split(",");
+                            String[] arr1;
+                            for (int i = 0; i < arr.length; i++) {
+                                arr1 = arr[i].split(":");
+                                if ("设备号".equals(arr1[0])){
+                                    machineDeviceId = arr1[1];
+                                    Log.i("", "onCreate: 获取的推送设备号为：：：：：" + arr1[1]);
+                                }else if ("名称".equals(arr1[0])){
+                                    deviceName = arr1[1];
+                                    Log.i("", "onCreate: 获取的推送机器名称为：：：：：" + arr1[1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Log.i("用户选择的机器的设备编号为：：：", "onCreate: " + machineDeviceId + "   名称为：：：" + deviceName);
+
+
+
+        initToolBar();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("MainActivity:", "run: 定时器：：：：：刷新数据：：：：");
+                loadData(machineDeviceId);
+            }
+        };
+        mTimer = new Timer();
+        mTimer.schedule(task, 0, 5000);
+    }
+
+    public void loadData(String deviceId) {
+
         paramMap = new HashMap<>();
-        paramMap.put("deviceId", "5678");
+        paramMap.put("deviceId", deviceId);
         MyNetWork myNetWork = MyNetWork.getInstance(this);
 
         myNetWork.postAsynHttp(devicePath, paramMap, new ResultCallback() {
@@ -91,22 +150,28 @@ public class MachineActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(String str) throws IOException {
-                detailState = ParseUtil.parseDeviceJson(str);
+                Gson gson = new Gson();
+                detailState = gson.fromJson(str, DetailState.class);
                 if (detailState.getCode() == 1) {
                     mDataBean = detailState.getData();
                     Log.i("MachineActivity:", "onResponse: 获取机器具体参数为：： " + str);
-                    name.setText(machineName);
+                    name.setText(deviceName);
                     tvMachineState.setText(mDataBean.getGzzt());
+                    if ("报警".equals(mDataBean.getGzzt())){
+                        tvMachineState.setBackgroundResource(R.drawable.off);
+                    }
+                    if ("warning".equals(mDataBean.getGzzt())) ;
                     setBackground(tvFan1State, mDataBean.getFj1());
                     setBackground(tvFan2State, mDataBean.getFj2());
                     setBackground(tvLiftMotorState, mDataBean.getTsj());
-                    setBackground(tvDischargeGrainMotorState, mDataBean.getPldj());
-                    setBackground(tvBeltMotorState, mDataBean.getPddj());
-//                    tvTime.setText(mDataBean.getSj());
+                    setBackground(tvDischargeGrainMotorState, (String) mDataBean.getPldj());
+                    setBackground(tvBeltMotorState, (String) mDataBean.getPddj());
+                    setBackground(tvSomkeMotorState, (String) mDataBean.getSmoke());
                     //风温过高
-                    if(mDataBean.getFw() > 20){
+                    if ("".equals(mDataBean.getFw())) {
                         tvWindTemperature.setBackgroundResource(R.drawable.other_alarm);
                     }
+                    setWinFoodBackground(tvWindTemperature, mDataBean.getFw()+"");
                     tvWindTemperature.setText(mDataBean.getFw() + "");
                     tvFoodstuffTemperature.setText(mDataBean.getLw() + "");
                     tvDew.setText(mDataBean.getSf() + "");
@@ -117,8 +182,6 @@ public class MachineActivity extends AppCompatActivity {
 
             }
         });
-
-        initToolBar();
     }
 
     private void initToolBar() {
@@ -135,17 +198,38 @@ public class MachineActivity extends AppCompatActivity {
         });
     }
 
+    //风温、粮温背景设置
+    public void setWinFoodBackground(TextView textView, String str){
+        if ("warn".equals(str)) {
+            Log.i("MachineActivity:", "setBackground: 状态为on，设置str为开");
+            textView.setText("警告");
+            textView.setBackgroundResource(R.drawable.off);
+        } else {
+            textView.setText(str);
+            textView.setBackgroundResource(R.drawable.open);
+        }
+    }
+    //电机工作状态背景设置
     public void setBackground(TextView textView, String str) {
         Log.i("MachineActivity:", "setBackground: setBackground开始运行:::, 获取的str为：：" + str);
-        if ("on".equals(str)) {
+        if ("warn".equals(str)) {
             Log.i("MachineActivity:", "setBackground: 状态为on，设置str为开");
-            textView.setText("开");
-            textView.setBackgroundResource(R.drawable.open);
-        } else if ("off".equals(str)) {
-            Log.i("MachineActivity:", "setBackground: 状态为off，设置str为开");
-            textView.setText("关");
+            textView.setText("警告");
             textView.setBackgroundResource(R.drawable.off);
+        } else {
+            Log.i("MachineActivity:", "setBackground: 状态为off，设置str为开");
+            if ("on".equals(str)) {
+                textView.setText("开");
+            } else if ("off".equals(str)) {
+                textView.setText("关");
+            }
+            textView.setBackgroundResource(R.drawable.open);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        mTimer.cancel();//销毁时关闭定时器
+        super.onDestroy();
+    }
 }

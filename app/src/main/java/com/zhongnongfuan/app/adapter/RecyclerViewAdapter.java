@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zhongnongfuan.app.R;
-import com.zhongnongfuan.app.bean.Machine;
+import com.zhongnongfuan.app.bean.MachineList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> implements View.OnClickListener {
 
     private Context mContext = null;
-    private Machine mMachines = null;
+    private MachineList mMachines = null;
     private OnRecyclerviewItemClickListener mOnItemClickListener = null;
 
-    public RecyclerViewAdapter(Context context, Machine machines) {
+    public RecyclerViewAdapter(Context context, MachineList machines) {
         mContext = context;
         mMachines = machines;
     }
@@ -42,16 +42,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        String saleState = null;
         myViewHolder.machineName.setText(mMachines.getData().get(i).getMC());
-        if (mMachines.getData().get(i).getSaled() == 1) {
-            saleState = "正在运行";
-            myViewHolder.ivIsAlarm.setBackgroundResource(R.drawable.round_green);
-        } else if (mMachines.getData().get(i).getSaled() == 0) {
-            saleState = "停止";
+        if ("报警".equals(mMachines.getData().get(i).getGzzt())) {
             myViewHolder.ivIsAlarm.setBackgroundResource(R.drawable.round_red);
+        } else {
+            myViewHolder.ivIsAlarm.setBackgroundResource(R.drawable.round_green);
         }
-        myViewHolder.machineCondition.setText(saleState);
+        myViewHolder.machineCondition.setText(mMachines.getData().get(i).getGzzt());
         myViewHolder.machineAddress.setText(mMachines.getData().get(i).getBZ());
         myViewHolder.itemView.setTag(i);
     }
@@ -93,7 +90,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mOnItemClickListener = itemClickListener;
     }
 
-    public void flushList(Machine list) {
+    public void flushList(MachineList list) {
         mMachines = list;
         notifyDataSetChanged();
     }

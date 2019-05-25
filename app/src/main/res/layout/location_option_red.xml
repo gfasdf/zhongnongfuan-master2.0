@@ -16,5 +16,5 @@
         android:id="@+id/baidumap_custom_img"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/map_locate"/>
+        android:src="@drawable/marker_red"/>
 </LinearLayout>

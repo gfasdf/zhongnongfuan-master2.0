@@ -4,9 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import com.zhongnongfuan.app.bean.DetailState;
-import com.zhongnongfuan.app.bean.Machine;
+import com.zhongnongfuan.app.bean.MachineList;
 
 import java.util.List;
+
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * 设置时要将配置文件的application名称设置为android:name=".utils.App"
@@ -15,16 +17,15 @@ public class App extends Application {
 
     private static final String TAG = "App";
     List<DetailState> mDetailStateList;
-    List<String> nameList;
 
-    private Machine mMachineList;
+    private MachineList mMachineList;
 
-    public Machine getMachineList() {
+    public MachineList getMachineList() {
         return mMachineList;
     }
 
-    public void setMachineList(Machine machineList) {
-        Log.i(TAG, "setMachineList: APP-设置机器集合：：：" + machineList);
+    public void setMachineList(MachineList machineList) {
+        Log.i(TAG, "setMachineList: APP-设置机器集合：：：" + machineList.toString());
         mMachineList = machineList;
     }
 
@@ -38,13 +39,10 @@ public class App extends Application {
         Log.i(TAG, "APP-setDetailStateList: 设置详细状态集合为：：" + mDetailStateList);
     }
 
-    public List<String> getNameList() {
-        return nameList;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
-
-    public void setNameList(List<String> nameList) {
-        Log.i(TAG, "setNameList: 设置的namelist值为：：： " + nameList);
-        this.nameList = nameList;
-    }
-
 }

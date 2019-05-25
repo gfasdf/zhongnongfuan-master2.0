@@ -9,7 +9,7 @@ public class DetailState implements Serializable {
      * code : 1
      * msg : Success
      * count : 1
-     * data : {"id":"207b46d2-68bc-45c3-8223-c8619439b602","gzzt":"杩涚伯","sj":"/Date(1555394571810)/","fw":23.1,"lw":25.5,"sf":13.2,"zl":3802,"deviceId":"5678","fj1":"on","fj2":"off","tsj":"on","pddj":"off","pldj":"on","lon":null,"lat":null,"fastComm":0,"ccid":"898607B1101700823754","warnTemp":50,"userLock":0,"jgcbm":null}
+     * data : {"id":"49eec7b5-c99b-4fd7-b2fa-6a13444877ad","jgcbm":"1234","gzzt":"报警","sj":"/Date(1558269536007)/","fw":23.1,"lw":25.5,"sf":13.2,"zl":3802,"deviceId":"5678","fj1":"on","fj2":"off","tsj":"on","pddj":"warn","pldj":"on","lon":null,"lat":null,"fastComm":0,"ccid":"898607B1101700823754","warnTemp":null,"userLock":0,"smoke":null}
      */
 
     private int code;
@@ -49,11 +49,12 @@ public class DetailState implements Serializable {
         this.data = data;
     }
 
-    public static class DataBean implements Serializable{
+    public static class DataBean {
         /**
-         * id : 207b46d2-68bc-45c3-8223-c8619439b602
-         * gzzt : 杩涚伯
-         * sj : /Date(1555394571810)/
+         * id : 49eec7b5-c99b-4fd7-b2fa-6a13444877ad
+         * jgcbm : 1234
+         * gzzt : 报警
+         * sj : /Date(1558269536007)/
          * fw : 23.1
          * lw : 25.5
          * sf : 13.2
@@ -62,18 +63,19 @@ public class DetailState implements Serializable {
          * fj1 : on
          * fj2 : off
          * tsj : on
-         * pddj : off
+         * pddj : warn
          * pldj : on
          * lon : null
          * lat : null
          * fastComm : 0
          * ccid : 898607B1101700823754
-         * warnTemp : 50.0
+         * warnTemp : null
          * userLock : 0
-         * jgcbm : null
+         * smoke : null
          */
 
         private String id;
+        private String jgcbm;
         private String gzzt;
         private String sj;
         private double fw;
@@ -90,9 +92,9 @@ public class DetailState implements Serializable {
         private Object lat;
         private int fastComm;
         private String ccid;
-        private double warnTemp;
+        private Object warnTemp;
         private int userLock;
-        private Object jgcbm;
+        private Object smoke;
 
         public String getId() {
             return id;
@@ -100,6 +102,14 @@ public class DetailState implements Serializable {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getJgcbm() {
+            return jgcbm;
+        }
+
+        public void setJgcbm(String jgcbm) {
+            this.jgcbm = jgcbm;
         }
 
         public String getGzzt() {
@@ -230,11 +240,11 @@ public class DetailState implements Serializable {
             this.ccid = ccid;
         }
 
-        public double getWarnTemp() {
+        public Object getWarnTemp() {
             return warnTemp;
         }
 
-        public void setWarnTemp(double warnTemp) {
+        public void setWarnTemp(Object warnTemp) {
             this.warnTemp = warnTemp;
         }
 
@@ -246,48 +256,12 @@ public class DetailState implements Serializable {
             this.userLock = userLock;
         }
 
-        public Object getJgcbm() {
-            return jgcbm;
+        public Object getSmoke() {
+            return smoke;
         }
 
-        public void setJgcbm(Object jgcbm) {
-            this.jgcbm = jgcbm;
+        public void setSmoke(Object smoke) {
+            this.smoke = smoke;
         }
-
-        @Override
-        public String toString() {
-            return "DataBean{" +
-                    "id='" + id + '\'' +
-                    ", gzzt='" + gzzt + '\'' +
-                    ", sj='" + sj + '\'' +
-                    ", fw=" + fw +
-                    ", lw=" + lw +
-                    ", sf=" + sf +
-                    ", zl=" + zl +
-                    ", deviceId='" + deviceId + '\'' +
-                    ", fj1='" + fj1 + '\'' +
-                    ", fj2='" + fj2 + '\'' +
-                    ", tsj='" + tsj + '\'' +
-                    ", pddj='" + pddj + '\'' +
-                    ", pldj='" + pldj + '\'' +
-                    ", lon=" + lon +
-                    ", lat=" + lat +
-                    ", fastComm=" + fastComm +
-                    ", ccid='" + ccid + '\'' +
-                    ", warnTemp=" + warnTemp +
-                    ", userLock=" + userLock +
-                    ", jgcbm=" + jgcbm +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "DetailState{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                ", count=" + count +
-                ", data=" + data +
-                '}';
     }
 }

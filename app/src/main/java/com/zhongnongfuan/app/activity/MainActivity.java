@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -27,16 +28,14 @@ import com.zhongnongfuan.app.adapter.OnRecyclerviewItemClickListener;
 import com.zhongnongfuan.app.adapter.RecyclerViewAdapter;
 import com.zhongnongfuan.app.bean.DetailState;
 import com.zhongnongfuan.app.bean.LatLngBean;
-import com.zhongnongfuan.app.bean.Machine;
+import com.zhongnongfuan.app.bean.MachineList;
 import com.zhongnongfuan.app.network.MyNetWork;
 import com.zhongnongfuan.app.network.ResultCallback;
 import com.zhongnongfuan.app.utils.App;
 import com.zhongnongfuan.app.utils.CommonUtils;
-import com.zhongnongfuan.app.utils.ParseUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +45,15 @@ import butterknife.ButterKnife;
 import okhttp3.Request;
 
 /**
- * @author qichaoqun
- * @create 2019/1/19
- * @Describe
+ * 机器列表
  */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final int QUIT_TIME = 2000;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     @BindView(R.id.refreshLayout)
@@ -63,18 +63,20 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.no_content)
     TextView noContent;
 
-
     private RecyclerViewAdapter mRecyclerViewAdapter;
-    private static Machine mMachines;//网络获取的机器列表
+    private static MachineList mMachines;//网络获取的机器列表
     private static List<DetailState> mDetailStateList;//通过机器列表访问网络获取机器详细状态信息列表
-    List<String> nameList;//机器列表的名称集合（用于在intent中向MachineMapActivity传递数据）
     Map<String, String> paramMap;//获取机器列表需要传递的参数
     private long mStartTime;
-    String deviceListPath = Prefix.PREFIX+"Android/SBLB";
-    String LatLonPath = Prefix.PREFIX+"Android/SBWZ";
+    String deviceListPath = Prefix.PREFIX+"Android/SBLB";//机器列表
+    String devicePath = Prefix.PREFIX + "Android/SBZT";//机器具体信息
+    String LatLonPath = Prefix.PREFIX+"Android/SBWZ";//经纬度路径
     Intent intent;
     String userId;
     public static boolean isForeground = false;
+    List<DetailState> detailStateList;//机器具体信息列表
+    DetailState detailState;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,18 +87,9 @@ public class MainActivity extends AppCompatActivity
         intent = getIntent();
         userId = intent.getStringExtra("userId");
 
-
         initView();
         loadData();
 
-       /* TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                Log.i("MainActivity:", "run: 定时器：：：：：刷新数据：：：：");
-                loadData();
-            }
-        };
-        new Timer().schedule(task, 5000, 5000);*/
     }
     /**
      * 从网络获取数据
@@ -105,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         Log.i("", "loadData: 列出机器数据：：：：：：");
         MyNetWork myNetWork1 = MyNetWork.getInstance(this);
         paramMap = new HashMap<>();
-        paramMap.put("userName", "jy");
+        paramMap.put("userName", userId);
         myNetWork1.postAsynHttp(deviceListPath, paramMap, new ResultCallback() {
             @Override
             public void onError(Request request, Exception e) {
@@ -115,35 +108,44 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onResponse(String str) throws IOException {
                 Log.i("MainActivity:", "onResponse: 获取机器列表返回值：：：： " + str);
-                mMachines = ParseUtil.parseDeviceListJson(str);
-                nameList = new ArrayList<>();
-                for (int i = 0; i < mMachines.getData().size(); i++) {
-                    nameList.add(mMachines.getData().get(i).getMC());
-                }
-                getApp().setMachineList(mMachines);
-                getApp().setNameList(nameList);
-                mRecyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, mMachines);
-                mRecyclerView.setAdapter(mRecyclerViewAdapter);
-                mRecyclerViewAdapter.setOnItemClickListener(new OnRecyclerviewItemClickListener() {
-                    @Override
-                    public void onItemClickListener(View v, int position) {
-                        if (CommonUtils.isFastDoubleClick()) {
-                            Toast.makeText(MainActivity.this, "操作过于频繁", Toast.LENGTH_SHORT).show();
-                        }else{
-                            //弹出Toast或者Dialog
-                            //假设根据机器的编号来获取相关的信息
-                            Intent intent = new Intent(MainActivity.this, MachineActivity.class);
-                            intent.putExtra("machine_name", mMachines.getData().get(position).getMC());
-                            startActivity(intent);
-                        }
+                Gson gson = new Gson();
+                mMachines = gson.fromJson(str, MachineList.class);
+                if (mMachines.getCode() == 1){
+                    Log.i("", "onResponse: 返回码为1:::::");
+                    getApp().setMachineList(mMachines);
+                    if (mMachines.getData().size() == 0){
+                        Toast.makeText(MainActivity.this, "无设备", Toast.LENGTH_SHORT).show();
                     }
-                });
-
+                    mRecyclerViewAdapter = new RecyclerViewAdapter(MainActivity.this, mMachines);
+                    mRecyclerView.setAdapter(mRecyclerViewAdapter);
+                    Log.i("", "onResponse: 给机器列表注册监听器");
+                    mRecyclerViewAdapter.setOnItemClickListener(new OnRecyclerviewItemClickListener() {
+                        @Override
+                        public void onItemClickListener(View v, int position) {
+                            if (CommonUtils.isFastDoubleClick()) {
+                                Toast.makeText(MainActivity.this, "操作过于频繁", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Log.i("", "onItemClickListener: 点击某一项：：：：：：：：");
+                                //弹出Toast或者Dialog
+                                //假设根据机器的编号来获取相关的信息
+                                Intent intent = new Intent(MainActivity.this, MachineActivity.class);
+                                Log.i("", "onItemClickListener: 即将传递的数据为：：：：deviceId：：" + mMachines.getData().get(position).getSB_BM()
+                                        +"  deviceName:::" + mMachines.getData().get(position).getMC());
+                                intent.putExtra("deviceId", mMachines.getData().get(position).getSB_BM());
+                                intent.putExtra("deviceName", mMachines.getData().get(position).getMC());
+                                intent.putExtra("activity", "MainActivity");
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                }else if (mMachines.getCode() == 0){
+                    Toast.makeText(MainActivity.this, "获取机器列表失败", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
         mProgressBar.setVisibility(View.GONE);
     }
+
 
     /**
      * 初始化控件和各种数据
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
-
+    //返回键
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -209,6 +211,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //toolbar上的功能键
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -218,12 +221,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if (id == R.id.action_map_location){
+        if (id == R.id.action_map_location){
             final MyNetWork myNetWork1 = MyNetWork.getInstance(this);
             paramMap = new HashMap<>();
-            paramMap.put("userName", "jy");
+            paramMap.put("userName", userId);
             myNetWork1.postAsynHttp(LatLonPath, paramMap, new ResultCallback() {
                 @Override
                 public void onError(Request request, Exception e) {
@@ -233,21 +234,21 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onResponse(String str) throws IOException {
                     Log.i("MainActivity:", "onResponse: 返回机器列表经纬度：：：" + str);
-
-                    LatLngBean latLngBean = ParseUtil.parseLatLngJson(str);
-                    if(latLngBean.getCode() == 1){
+                    Log.i("", "onResponse: 即将作为参数传递的机器列表为：：：" + mMachines);
+                    Log.i("", "onResponse: 即将作为参数传递的机器列表(getApp)为：：：" + getApp().getMachineList());
+                    Gson gson = new Gson();
+                    LatLngBean latLngBean =  gson.fromJson(str, LatLngBean.class);
+                    if(latLngBean != null && (latLngBean.getCode() == 1)){
                         List<LatLngBean.DataBean> dataBeanList = latLngBean.getData();
-
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("dataBeanList", (Serializable) dataBeanList);
-
+                        bundle.putSerializable("MachineList", (Serializable) mMachines);
                         Intent intent1 = new Intent(MainActivity.this, MachineMapActivity.class);
                         intent1.putExtras(bundle);
                         startActivity(intent1);
                     }else {
                         Toast.makeText(MainActivity.this, "加载定位信息失败", Toast.LENGTH_SHORT).show();
                     }
-                   
                 }
             });
         }

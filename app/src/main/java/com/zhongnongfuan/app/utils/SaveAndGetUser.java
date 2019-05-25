@@ -3,6 +3,9 @@ package com.zhongnongfuan.app.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author qichaoqun
  * @date 2019/1/19
@@ -21,14 +24,18 @@ public class SaveAndGetUser {
      * 没有就说明用户没有进行登陆
      * @return
      */
-    public boolean getUser(){
+    public List<String> getUser(){
+        List<String> stringList = new ArrayList<>();
         SharedPreferences sharedPreferences = mContext.getSharedPreferences("user_infor",Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("user_name",null);
         String passWord = sharedPreferences.getString("user_password",null);
         if(userName == null || passWord == null){
-            return false;
+            return null;
+        }else{
+            stringList.add(userName);
+            stringList.add(passWord);
         }
-        return true;
+        return stringList;
     }
 
 
