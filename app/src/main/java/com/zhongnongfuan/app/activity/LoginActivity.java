@@ -19,6 +19,7 @@ import com.zhongnongfuan.app.utils.SaveAndGetUser;
 import com.zhongnongfuan.app.utils.TagAliasOperatorHelper;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class LoginActivity extends Activity {
     EditText mPassEdit;
     private MyNetWork mMyNetWork;
 
-    String loginPath = Prefix.PREFIX+"Android/Login";
+    String loginPath = Prefix.PREFIXQ+"Android/Login";
     Map<String, String> map = new HashMap<>();
 
     @Override
@@ -110,15 +111,14 @@ public class LoginActivity extends Activity {
                             if (loginResponseBean.getCode() == 1){
                                 SaveAndGetUser saveAndGetUser = new SaveAndGetUser(LoginActivity.this);
                                 saveAndGetUser.setUser(userName,passWord);
+                                setAlias(userName);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 intent.putExtra("userId", userName);
+                                intent.putExtra("userInfo", (Serializable) loginResponseBean);
                                 startActivity(intent);
-                                setAlias(userName);
-                                finish();
                             }else if(loginResponseBean.getCode() == 0){
                                 Toast.makeText(LoginActivity.this, "登录失败，请检查用户名和密码", Toast.LENGTH_SHORT).show();
                             }
-
                         }
                     });
                 }

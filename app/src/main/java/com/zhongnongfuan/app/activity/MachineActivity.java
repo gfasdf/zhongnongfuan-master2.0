@@ -72,8 +72,6 @@ public class MachineActivity extends AppCompatActivity {
     String devicePath = Prefix.PREFIX + "Android/SBZT";
     @BindView(R.id.tv_somke_motor_state)
     TextView tvSomkeMotorState;
-/*    @BindView(R.id.tv_time)
-    TextView tvTime;*/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,16 +79,10 @@ public class MachineActivity extends AppCompatActivity {
         setContentView(R.layout.machine_layout);
         ButterKnife.bind(this);
 
-/*        intent  =  getIntent();
-        machineDeviceId = intent.getStringExtra("deviceId");
-        deviceName = intent.getStringExtra("deviceName");
-        Log.i("用户选择的机器的设备编号为：：：", "onCreate: " + machineDeviceId + "   名称为：：：" + deviceName);*/
-
         intent = getIntent();
         if (intent!=null){
             if (intent.getExtras()!= null){
                 if ("MainActivity".equals(intent.getStringExtra("activity"))){
-                    Log.i("", "onCreate: 数据来自MainActivity：：：：：");
                     machineDeviceId = intent.getStringExtra("deviceId");
                     deviceName = intent.getStringExtra("deviceName");
                 }else{
@@ -120,8 +112,6 @@ public class MachineActivity extends AppCompatActivity {
             }
         }
         Log.i("用户选择的机器的设备编号为：：：", "onCreate: " + machineDeviceId + "   名称为：：：" + deviceName);
-
-
 
         initToolBar();
 
@@ -186,7 +176,6 @@ public class MachineActivity extends AppCompatActivity {
 
     private void initToolBar() {
         machineToolbar.setTitle("详细状态信息");
-        setSupportActionBar(machineToolbar);
         setSupportActionBar(machineToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

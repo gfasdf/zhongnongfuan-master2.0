@@ -7,4 +7,10 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_location">在地图上查看位置</string>
+
+    <string name="string_stop_play">"停止"</string>
+    <string name="string_pause_play">"暂停"</string>
+    <string name="string_start_play">"播放"</string>
+    <string name="string_not_found_recordfile">"未找到录像文件"</string>
+
 </resources>

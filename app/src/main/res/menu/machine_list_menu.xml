@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_map_location"
         android:orderInCategory="100"
         android:title="显示位置"
+        app:showAsAction="never"/>
+
+
+    <item
+        android:id="@+id/action_video_supervision"
+        android:orderInCategory="100"
+        android:title="视频监控"
         app:showAsAction="never"/>
 </menu>

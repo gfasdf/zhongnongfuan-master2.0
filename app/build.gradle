@@ -4,6 +4,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
 //        applicationId "com.zhongnongfuan.app"//JPush 上注册的包名.
+        ndk {
+            abiFilters "armeabi-v7a"//只支持32位
+        }
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
@@ -26,6 +29,7 @@ android {
         }
     }
     buildToolsVersion '28.0.3'
+
 }
 
 dependencies {
@@ -55,11 +59,9 @@ dependencies {
     //进度条
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     //引入gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+//    implementation 'com.google.code.gson:gson:2.8.5'
     implementation files('libs/BaiduLBS_Android.jar')
-    //极光推送
-    /*  implementation 'cn.jiguang.sdk:jpush:3.2.0' // 此处以JPush 3.2.0 版本为例。
-            implementation 'cn.jiguang.sdk:jcore:1.2.7'  // 此处以JCore 1.2.7 版本为例。*/
+
     implementation 'com.android.support:swiperefreshlayout:28.0.0'
     //下拉刷新和上滑刷新
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
@@ -68,5 +70,8 @@ dependencies {
     implementation files('libs/jcore-android-1.2.7.jar')
     implementation files('libs/jpush-android-3.2.0.jar')
     //gson
-    implementation 'com.google.code.gson:gson:2.8.4'
+//    implementation 'com.google.code.gson:gson:2.8.4'
+    implementation files('libs/EZOpenSDK_V4.8.3.20180530.jar')
+    implementation files('libs/EZUIKit_2.0.jar')
+    implementation files('libs/gson-2.7.jar')
 }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/machine_toolbar_contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/toobar_back_color"
+        app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:layout_below="@+id/machine_toolbar_contact">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="7dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:weightSum="3"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginBottom="6dp"
+                        android:background="@color/background_grey"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/contact_us"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="联系方式"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"/>
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:id="@+id/tv_sale_tel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="销售热线："
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            />
+                        <TextView
+                            android:id="@+id/tv_sale_tel_param"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_sale_tel"
+                            android:layout_marginLeft="2dp"
+                            android:text="400-1515-366"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"/>
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:id="@+id/tv_fax"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="传真："
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            />
+                        <TextView
+                            android:id="@+id/tv_fax_param"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_fax"
+                            android:layout_marginLeft="2dp"
+                            android:text="0371-61700277"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"/>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp">
+                        <TextView
+                            android:id="@+id/tv_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="联系地址："
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            />
+                        <TextView
+                            android:id="@+id/tv_address_param"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_address"
+                            android:layout_marginLeft="2dp"
+                            android:text="郑州市郑东新区农业南路商鼎路东方"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
