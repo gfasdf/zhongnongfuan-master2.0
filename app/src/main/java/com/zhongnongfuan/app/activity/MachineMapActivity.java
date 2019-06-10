@@ -47,6 +47,7 @@ public class MachineMapActivity extends Activity {
     private TextView tvWorkState;
     private TextView tvRefinery;
     private TextView tvDeviceId;
+    boolean isFirstLoadMap = true;
 
 
     @Override
@@ -156,6 +157,7 @@ public class MachineMapActivity extends Activity {
             BitmapDescriptor bitmapDescriptor;
             //设置坐标点
             for (int i = 0; i < dataBeanList.size(); i++) {
+                Log.i(TAG, "onReceiveLocation: 坐标信息为：：：" + mMachineList);
                 mBundle = new Bundle();
                 mBundle.putString("deviceId", dataBeanList.get(i).getDeviceid());
                 mBundle.putString("lat", dataBeanList.get(i).getLat());
@@ -164,7 +166,7 @@ public class MachineMapActivity extends Activity {
                     Log.i(TAG, "onReceiveLocation: mBundle值设置为：：：：" + dataBeanList.get(i).getDeviceid());
                     if (dataBeanList.get(i).getDeviceid().equals(mMachineList.getData().get(j).getSB_BM())){
                         Log.i(TAG, "onReceiveLocation: 设备marker背景：：：：工作状态为：：：" + mMachineList.getData().get(i).getGzzt());
-                        if ("报警".equals(mMachineList.getData().get(i).getGzzt())){
+                        if ("报警".equals(mMachineList.getData().get(j).getGzzt())){
                             location_option = LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.location_option_red, null);
                         }else {
                             location_option = LayoutInflater.from(MachineMapActivity.this).inflate(R.layout.location_option_green, null);
@@ -243,7 +245,10 @@ public class MachineMapActivity extends Activity {
                 }
             });
         }else {
-            Toast.makeText(MachineMapActivity.this, "无机器可显示", Toast.LENGTH_SHORT).show();
+            if (isFirstLoadMap){
+                Toast.makeText(MachineMapActivity.this, "无机器可显示", Toast.LENGTH_SHORT).show();
+                isFirstLoadMap = false;
+            }
         }
         }
     }

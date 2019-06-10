@@ -6,12 +6,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.EzvizWebViewActivity">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/machine_toolbar_supervision"
+        android:id="@+id/monitor_toolbar_supervision"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/toobar_back_color"
         app:titleTextAppearance="@style/Toolbar.TitleText"/>
+
+   <!-- <RelativeLayout
+        android:id="@+id/activity_play"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_below="@id/monitor_toolbar_supervision"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/player_layout"
+            android:layout_width="match_parent"
+            android:background="@color/black"
+            android:layout_height="wrap_content">
+
+            <com.ezvizuikit.open.EZUIPlayer
+                android:id="@+id/player_ui"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:visibility="visible"
+                android:layout_height="wrap_content"/>
+
+            <com.ezvizuikit.open.EZUIPlayer
+                android:id="@+id/player_ui2"
+                android:layout_width="match_parent"
+                android:background="@color/black"
+                android:visibility="invisible"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
 
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -19,7 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_below="@id/machine_toolbar_supervision"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/activity_play"
         android:id="@+id/monitor_swipeLayout" >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/monitor_recycler_view"
@@ -28,6 +58,24 @@
             android:layout_marginTop="10dp">
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
+
+-->
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/monitor_toolbar_supervision"
+        android:id="@+id/monitor_swipeLayout" >
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/monitor_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 
 

@@ -115,7 +115,7 @@ public class DoublePlayActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         LogUtil.d(TAG,"onCreate");
         setContentView(R.layout.activity_double_play);
-        mOrientationDetector = new DoublePlayActivity.MyOrientationDetector(this);
+        mOrientationDetector = new MyOrientationDetector(this);
         Intent intent = getIntent();
         appkey = intent.getStringExtra(APPKEY);
         accesstoken = intent.getStringExtra(AccessToekn);

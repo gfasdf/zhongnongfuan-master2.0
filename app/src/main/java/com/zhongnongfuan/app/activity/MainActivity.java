@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     String userId;
     LoginResponseBean mLoginResponseBean;
     public static boolean isForeground = false;
+    boolean isFirstLoad = true;
 
 
     @Override
@@ -140,7 +141,10 @@ public class MainActivity extends AppCompatActivity
                     }
 
                 } else if (mMachines.getCode() == 0) {
-                    Toast.makeText(MainActivity.this, "获取机器列表失败", Toast.LENGTH_SHORT).show();
+                    if (isFirstLoad){
+                        Toast.makeText(MainActivity.this, "获取机器列表失败", Toast.LENGTH_SHORT).show();
+                        isFirstLoad = false;
+                    }
                 }
             }
         });

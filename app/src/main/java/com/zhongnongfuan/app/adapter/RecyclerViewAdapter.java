@@ -49,7 +49,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             myViewHolder.ivIsAlarm.setBackgroundResource(R.drawable.round_green);
         }
         myViewHolder.machineCondition.setText(mMachines.getData().get(i).getGzzt());
-        myViewHolder.machineAddress.setText("备注：" + mMachines.getData().get(i).getBZ());
+        myViewHolder.machineAddress.setText(mMachines.getData().get(i).getBZ());
         myViewHolder.itemView.setTag(i);
     }
 

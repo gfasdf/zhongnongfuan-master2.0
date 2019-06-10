@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
     EditText mPassEdit;
     private MyNetWork mMyNetWork;
 
-    String loginPath = Prefix.PREFIXQ+"Android/Login";
+    String loginPath = Prefix.PREFIX+"Android/Login";
     Map<String, String> map = new HashMap<>();
 
     @Override
@@ -138,7 +138,6 @@ public class LoginActivity extends Activity {
 
 
     boolean isAliasAction = false;
-    String alias = "jy";
     int action = -1;
     public static final int ACTION_GET = 5;//获取
     public void setAlias(String username){
@@ -148,9 +147,8 @@ public class LoginActivity extends Activity {
         tagAliasBean.action = action;
         sequence++;
         if(isAliasAction){
-            Log.i("", "onCreate: 设置别名：：：：：：： " + alias);
-//            tagAliasBean.alias = username;
-            tagAliasBean.alias = alias;//设置别名
+            Log.i("", "onCreate: 设置别名：：：：：：： " + username);
+            tagAliasBean.alias = username;
         }
         tagAliasBean.isAliasAction = isAliasAction;
         TagAliasOperatorHelper.getInstance().handleAction(getApplicationContext(),sequence,tagAliasBean);

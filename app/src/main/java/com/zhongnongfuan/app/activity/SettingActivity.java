@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zhongnongfuan.app.R;
 
@@ -49,11 +48,9 @@ public class SettingActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 //控制开关字体颜色
                 if (isChecked) {
-                    Toast.makeText(SettingActivity.this, "字体颜色改变为绿色", Toast.LENGTH_SHORT).show();
                     aSwitch.setSwitchTextAppearance(SettingActivity.this, R.style.s_true);
                     inputTel.setEnabled(true);
                 } else {
-                    Toast.makeText(SettingActivity.this, "字体颜色改变为灰色", Toast.LENGTH_SHORT).show();
                     aSwitch.setSwitchTextAppearance(SettingActivity.this, R.style.s_false);
                     inputTel.setEnabled(false);
                 }

@@ -356,6 +356,27 @@
                                 android:background="@drawable/other"/>
 
                         </TableRow>
+                        <TableRow
+                            android:layout_marginTop="5dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="风温上限"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/tv_wind_temperature_max"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:gravity="center"
+                                android:text="100℃"
+                                android:textColor="@color/white"
+                                android:background="@drawable/other"/>
+
+                        </TableRow>
 
                         <TableRow
                             android:layout_marginTop="5dp">
@@ -363,7 +384,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_column="1"
-                                android:text="粮食温度"
+                                android:text="粮温"
                                 android:textSize="18sp"
                                 android:textColor="@color/black"/>
 
@@ -374,6 +395,49 @@
                                 android:layout_column="3"
                                 android:gravity="center"
                                 android:text="26C"
+                                android:textColor="@color/white"
+                                android:background="@drawable/other"/>
+
+                        </TableRow>
+                        <TableRow
+                            android:layout_marginTop="5dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="粮温上限"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/tv_foodstuff_temperature_max"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:gravity="center"
+                                android:text="26C"
+                                android:textColor="@color/white"
+                                android:background="@drawable/other"/>
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_marginTop="5dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="满粮延时"
+                                android:textSize="18sp"
+                                android:textColor="@color/black"/>
+
+                            <TextView
+                                android:id="@+id/tv_food_full_delay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="3"
+                                android:gravity="center"
+                                android:text="10min"
                                 android:textColor="@color/white"
                                 android:background="@drawable/other"/>
 
@@ -423,55 +487,6 @@
                                 android:background="@drawable/other"/>
 
                         </TableRow>
-
-    <!--                    <TableRow
-                            android:layout_marginTop="5dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="经度"
-                                android:textSize="18sp"
-                                android:textColor="@color/black"/>
-
-                            <TextView
-                                android:id="@+id/tv_longitude"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="3"
-                                android:gravity="center"
-                                android:text="28"
-                                android:textColor="@color/white"
-                                android:background="@drawable/other"/>
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_marginTop="5dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="纬度"
-                                android:textSize="18sp"
-                                android:textColor="@color/black"/>
-
-                            <TextView
-                                android:id="@+id/tv_latitude"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="3"
-                                android:gravity="center"
-                                android:text="28"
-                                android:textColor="@color/white"
-                                android:background="@drawable/other"/>
-
-                        </TableRow>
--->
-
-
-
-
 
                     </TableLayout>
 

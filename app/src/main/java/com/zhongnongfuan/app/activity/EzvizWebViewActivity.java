@@ -35,12 +35,12 @@ public class EzvizWebViewActivity extends AppCompatActivity {
     public static final String APPKEY = "AppKey";
     public static final String AccessToekn = "AccessToekn";
     public static final String PLAY_URL = "play_url";
-    public String monitorListPath = Prefix.PREFIXQ + "Android/Monitor";
+    public String monitorListPath = Prefix.PREFIX + "Android/Monitor";
     public static String AppKey = "945bbd856cd84ea599fec4241f0ed632";
     @BindView(R.id.monitor_recycler_view)
     RecyclerView monitor_recycler_view;
-    @BindView(R.id.machine_toolbar_supervision)
-    Toolbar machineToolbarSupervision;
+    @BindView(R.id.monitor_toolbar_supervision)
+    Toolbar monitorToolbarSupervision;
     @BindView(R.id.monitor_swipeLayout)
     SwipeRefreshLayout monitor_swipeLayout;
     private VideoRecyclerViewAdapter mVideoRecyclerViewAdapter;
@@ -104,11 +104,11 @@ public class EzvizWebViewActivity extends AppCompatActivity {
     }
 
     private void initToolBar() {
-        machineToolbarSupervision.setTitle("监控列表");
-        setSupportActionBar(machineToolbarSupervision);
+        monitorToolbarSupervision.setTitle("监控列表");
+        setSupportActionBar(monitorToolbarSupervision);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        machineToolbarSupervision.setNavigationOnClickListener(new View.OnClickListener() {
+        monitorToolbarSupervision.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
