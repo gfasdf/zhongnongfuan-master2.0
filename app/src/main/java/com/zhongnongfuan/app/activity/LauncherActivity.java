@@ -1,7 +1,6 @@
 package com.zhongnongfuan.app.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.zhongnongfuan.app.utils.SaveAndGetUser;
 
 import java.util.concurrent.TimeUnit;
 
@@ -58,7 +56,7 @@ public class LauncherActivity extends Activity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        mIntent.setClass(LauncherActivity.this,MainActivity.class);
+                        mIntent.setClass(LauncherActivity.this,Main2Activity.class);
                         startActivity(mIntent);
                         finish();
                     }

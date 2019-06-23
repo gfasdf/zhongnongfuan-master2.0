@@ -28,7 +28,9 @@ import com.zhongnongfuan.app.R;
 import com.zhongnongfuan.app.utils.WindowSizeChangeNotifier;
 
 import java.util.Calendar;
-
+/**
+ * 启动动回放带时间轴页面
+ */
 public class PlayActivity extends AppCompatActivity implements View.OnClickListener, WindowSizeChangeNotifier.OnWindowSizeChangedListener, EZUIPlayer.EZUIPlayerCallBack {
     private static final String TAG = "PlayActivity";
     public static final String APPKEY = "AppKey";
@@ -103,6 +105,7 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 /*        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);*/
+        getWindow().getDecorView().setSystemUiVisibility(View.INVISIBLE);
         super.onCreate(savedInstanceState);
         LogUtil.d(TAG,"onCreate");
         setContentView(R.layout.activity_play);

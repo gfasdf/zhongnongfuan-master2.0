@@ -85,6 +85,7 @@ public class MachineActivity extends AppCompatActivity {
                 if ("MainActivity".equals(intent.getStringExtra("activity"))){
                     machineDeviceId = intent.getStringExtra("deviceId");
                     deviceName = intent.getStringExtra("deviceName");
+                    Log.i("", "onCreate: intent来自MainActivity：：：：deviceId为: "+ machineDeviceId + " deviceName为： "+ deviceName);
                 }else{
                     Log.i("", "onCreate: 数据来自receiver");
                     Bundle bundle = intent.getExtras();  //取出来的是个数组
@@ -111,7 +112,7 @@ public class MachineActivity extends AppCompatActivity {
                 }
             }
         }
-        Log.i("用户选择的机器的设备编号为：：：", "onCreate: " + machineDeviceId + "   名称为：：：" + deviceName);
+        Log.i("用户选择的机器的设备编号为：：：",   machineDeviceId + "   名称为：：：" + deviceName);
 
         initToolBar();
 
@@ -123,11 +124,11 @@ public class MachineActivity extends AppCompatActivity {
             }
         };
         mTimer = new Timer();
-        mTimer.schedule(task, 0, 5000);
+        mTimer.schedule(task, 0, 50000);
     }
 
     public void loadData(String deviceId) {
-
+        Log.i("", "loadData: 读取机器具体信息：：：：：：" + deviceId);
         paramMap = new HashMap<>();
         paramMap.put("deviceId", deviceId);
         MyNetWork myNetWork = MyNetWork.getInstance(this);

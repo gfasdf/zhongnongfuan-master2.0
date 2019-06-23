@@ -15,8 +15,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
@@ -59,7 +57,12 @@
         android:roundIcon="@mipmap/luancher_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.ShareActivity"></activity>
+        <activity android:name=".base.BaseActivity"></activity>
+        <activity
+            android:name=".activity.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.ShareActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ContactUsActivity" />
         <activity android:name=".activity.UserInfoActivity" />
@@ -70,17 +73,10 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity android:name=".activity.DoublePlayActivity" />
         <activity android:name=".activity.PlayActivity" />
-        <activity
-            android:name=".activity.EzvizWebViewActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" /> <!-- 用于sdk中间页显示，包含登录、开通云存储等。 -->
+        <!-- 用于sdk中间页显示，包含登录、开通云存储等。 -->
         <!-- 跳转到百度地图地图的页面 -->
-        <activity
-            android:name=".activity.MachineMapActivity"
-            android:theme="@android:style/Theme.NoTitleBar" /> <!-- 机器列表页面 -->
-        <activity
-            android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- 启动页面 -->
+        <!-- 机器列表页面 -->
+        <!-- 启动页面 -->
         <activity
             android:name=".activity.LauncherActivity"
             android:theme="@style/launcher_style">

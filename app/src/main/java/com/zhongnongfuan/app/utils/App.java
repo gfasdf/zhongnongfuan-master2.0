@@ -1,11 +1,15 @@
 package com.zhongnongfuan.app.utils;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import com.zhongnongfuan.app.bean.DetailState;
+import com.zhongnongfuan.app.bean.LatLngBean;
 import com.zhongnongfuan.app.bean.MachineList;
+import com.zhongnongfuan.app.bean.MonitorBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
@@ -19,8 +23,10 @@ public class App extends Application {
     List<DetailState> mDetailStateList;
 
     private MachineList mMachineList;
+    private static Context context;
 
     public MachineList getMachineList() {
+        Log.i(TAG, "getMachineList:  APP-获取机器集合：：：" + mMachineList);
         return mMachineList;
     }
 
@@ -44,5 +50,37 @@ public class App extends Application {
         super.onCreate();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        context = getApplicationContext();
     }
+
+    public ArrayList<LatLngBean.DataBean> getDataBeanList() {
+        Log.i(TAG, "getDataBeanList: 获取DataBeanList的值为：：：：" + mDataBeanList);
+        return mDataBeanList;
+    }
+
+    public void setDataBeanList(ArrayList<LatLngBean.DataBean> dataBeanList) {
+        Log.i(TAG, "setDataBeanList: 设置DataBeanList的值为：：：：" + dataBeanList);
+        mDataBeanList = dataBeanList;
+    }
+
+    private ArrayList<LatLngBean.DataBean> mDataBeanList;
+
+    public static Context getAppContext(){
+        return context;
+    }
+
+
+
+    private MonitorBean mMonitorBean;
+
+    public MonitorBean getMonitorBean() {
+        Log.i(TAG, "getMonitorBean: 获取监控列表：：：：：：：" + mMonitorBean);
+        return mMonitorBean;
+    }
+
+    public void setMonitorBean(MonitorBean monitorBean) {
+        Log.i(TAG, "setMonitorBean: 设置监控列表：：：：：" + monitorBean);
+        mMonitorBean = monitorBean;
+    }
+
 }

@@ -11,6 +11,9 @@ import com.zhongnongfuan.app.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 侧滑 联系我们选项
+ */
 public class ContactUsActivity extends AppCompatActivity {
 
     @BindView(R.id.machine_toolbar_contact)

@@ -34,8 +34,7 @@ import okhttp3.Request;
 import static com.zhongnongfuan.app.utils.TagAliasOperatorHelper.ACTION_SET;
 import static com.zhongnongfuan.app.utils.TagAliasOperatorHelper.sequence;
 /**
- * @author qichaoqun
- * @date 2019/1/19
+ *登录界面
  */
 public class LoginActivity extends Activity {
 
@@ -112,7 +111,7 @@ public class LoginActivity extends Activity {
                                 SaveAndGetUser saveAndGetUser = new SaveAndGetUser(LoginActivity.this);
                                 saveAndGetUser.setUser(userName,passWord);
                                 setAlias(userName);
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                                 intent.putExtra("userId", userName);
                                 intent.putExtra("userInfo", (Serializable) loginResponseBean);
                                 startActivity(intent);

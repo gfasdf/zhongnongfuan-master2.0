@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.zhongnongfuan.app.activity.MachineActivity;
-import com.zhongnongfuan.app.activity.MainActivity;
+import com.zhongnongfuan.app.activity.Main2Activity;
 import com.zhongnongfuan.app.utils.ExampleUtil;
 import com.zhongnongfuan.app.utils.LocalBroadcastManager;
 import com.zhongnongfuan.app.utils.Logger;
@@ -114,16 +114,16 @@ public class MyReceiver extends BroadcastReceiver {
 	
 	//send msg to MainActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
-		if (MainActivity.isForeground) {
+		if (Main2Activity.isForeground) {
 			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+			Intent msgIntent = new Intent(Main2Activity.MESSAGE_RECEIVED_ACTION);
+			msgIntent.putExtra(Main2Activity.KEY_MESSAGE, message);
 			if (!ExampleUtil.isEmpty(extras)) {
 				try {
 					JSONObject extraJson = new JSONObject(extras);
 					if (extraJson.length() > 0) {
-						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+						msgIntent.putExtra(Main2Activity.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
 				}

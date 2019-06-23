@@ -26,7 +26,7 @@ import com.zhongnongfuan.app.R;
 import java.util.Calendar;
 
 /**
- * 预览界面
+ * 普通回放页面
  */
 public class DoublePlayActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "PlayActivity";
