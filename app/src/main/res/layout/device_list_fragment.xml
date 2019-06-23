@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context=".activity.Main2Activity"
+    tools:showIn="@layout/app_bar_main2">
 
 
     <android.support.v4.widget.SwipeRefreshLayout
@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:id="@+id/swipeLayout" >
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/recycler_view_fragment_one"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp">
